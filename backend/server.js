@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { response } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user_route.js';
@@ -27,3 +27,13 @@ app.listen(3000, () => {
 
 app.use('/backend/user_route', userRoutes)
 app.use('/backend/auth_route', authRoutes)
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal server error"
+    return res.status(statusCode).json({
+        success: false,
+        message,
+        statusCode
+    })
+})
