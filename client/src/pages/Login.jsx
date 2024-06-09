@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Login() {
 
   const [ formData, setFormData ] = useState({});
-  const [ error, setError ] = useState(false);
-  const [ loading, setLoading ] = useState(false);
+  const { loading, error } = useSelector((state) => state.user)
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.id]: event.target.value })
   }
@@ -14,6 +17,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      dispatch(loginStart());
       const res = await fetch('/backend/auth_route/login', {
         method: 'POST',
         headers: {
@@ -22,15 +26,14 @@ function Login() {
         body: JSON.stringify(formData)
       });
       const data = await res.json();
-      setLoading(false);
       if (data.success == false) {
-        setError(true);
+        dispatch(loginFailure(data));
+        return;
       }
-      setError(false);
+      dispatch(loginSuccess(data));
       navigate('/');
     } catch (error) {
-      setLoading(false);
-      setError(true);
+      dispatch(loginFailure(error));
     }
     
   }
@@ -60,7 +63,7 @@ function Login() {
           <span className='text-blue-500'>Sign up</span>
         </Link>
       </div>
-      <p className='text-red-700 mt-5'>{error && 'There was an issue logging into your account'}</p>
+      <p className='text-red-700 mt-5'>{error ? error.message || 'There was an issue logging into your account' : ""}</p>
     </div>
   )
 }
