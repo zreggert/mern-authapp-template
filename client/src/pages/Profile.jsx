@@ -9,7 +9,7 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
-  // signOut
+  signOut
 } from '../redux/user/userSlice.js'
 
 
@@ -93,6 +93,18 @@ export default function Profile() {
     } catch (error) {
       dispatch(deleteUserFailure(error))
     }
+  };
+
+  const handleSignout = async () => {
+    try {
+      await fetch(`/backend/auth_route/signout`, {
+        method: 'GET',
+        credentials: 'include'
+      })
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -122,7 +134,7 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-700 cursor-pointer" onClick={handleDelete}>Delete Account</span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        <span className="text-red-700 cursor-pointer" onClick={handleSignout}>Sign Out</span>
       </div>
       <p className="text-red-700 mt-5">{error && "Something went wrong"}</p>
       <p className="text-green-700 mt-5">{updateSuccess && "User has been updated successfully!"}</p>

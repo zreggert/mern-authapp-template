@@ -52,22 +52,28 @@ export const google = async (req, res, next) => {
             res.cookie('access_token', token, { httpOnly: true, expires: expiryDate }).status(200).json(userData)
             console.log(user._doc)
         } else {
-            console.log("this is the else")
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
             const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+            
             const newUser = new User({
-                username: req.body.name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-8),
+                username: req.body.email,
                 email: req.body.email,
                 password: hashedPassword,
                 profilePicture: req.body.photo
             });
             await newUser.save();
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-            const { password: hashedPassword2, ...userData } = user._doc;
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const { password: hashedPassword2, ...userData } = newUser._doc;
             const expiryDate = new Date(Date.now() + 3600000);
             res.cookie('access_token', token, { httpOnly: true, expires: expiryDate }).status(200).json(userData)
         }
     } catch (error) {
         next(error)
     }
+}
+
+// sign out
+
+export const signout = (req, res) => {
+    res.clearCookie('access_token').status(200).json('You are now signed out.')
 }

@@ -26,13 +26,15 @@ function Login() {
         },
         body: JSON.stringify(formData)
       });
+      
       const data = await res.json();
-      if (data.success == false) {
+      if (data.success === false) {
         dispatch(loginFailure(data));
-        return;
+      } else {
+        dispatch(loginSuccess(data));
+        navigate('/');
       }
-      dispatch(loginSuccess(data));
-      navigate('/');
+      
     } catch (error) {
       dispatch(loginFailure(error));
     }

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/user_route.js';
 import authRoutes from './routes/auth_route.js';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 dotenv.config();
 
@@ -17,12 +18,14 @@ mongoose
         console.log("Unable to connect to database")
     })
 
+// const __dirname = path.resolve()
+
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-app.use(cookieParser())
+app.use(cookieParser());
 
 app.listen(3000, () => {
     console.log("Server listening on port 3000")

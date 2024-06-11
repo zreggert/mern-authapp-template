@@ -23,12 +23,15 @@ function Signup() {
         body: JSON.stringify(formData)
       });
       const data = await res.json();
+      console.log(data)
       setLoading(false);
       if (data.success == false) {
         setError(true);
+      } else {
+        setError(false);
+        navigate('/login');
       }
-      setError(false);
-      navigate('/login');
+      
     } catch (error) {
       setLoading(false);
       setError(true);
