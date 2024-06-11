@@ -13,6 +13,7 @@
   "type": "module",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "eslint-plugin-react-hooks": "^5.1.0-rc-6230622a1a-20240610",
     "express": "^4.19.2",
