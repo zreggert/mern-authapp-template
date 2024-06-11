@@ -1,7 +1,8 @@
-// eslint-disable-next-line no-unused-vars
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Navbar() {
+  const { currentUser } = useSelector((state) => state.user)
   return (
     <div className='bg-slate-200'>
         <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
@@ -15,11 +16,12 @@ export default function Navbar() {
                 <Link to='/about'>
                     <li className='font-bold'>About</li>
                 </Link>
-                <Link to='/login'>
-                    <li className='font-bold'>Login</li>
-                </Link>
-                <Link to='/signup'>
-                    <li className='font-bold'>Sign Up</li>
+                <Link to='/profile'>
+                    {currentUser ? (
+                        <img src={currentUser.profilePicture} alt="profile" className='h-7 w-7 rounded-full object-cover' />
+                    ) : (
+                        <li className='font-bold'>Login</li>
+                    )} 
                 </Link>
             </ul>
         </div>
